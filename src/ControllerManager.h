@@ -197,19 +197,19 @@ public:
 	void update();
 
 	// Callback function when button is pressed
-	std::function<void(ControllerID id, IO::XBOX_360::BUTTON button)> onButtonPressed;
+	static std::function<void(ControllerID id, IO::XBOX_360::BUTTON button)> onButtonPressed;
 
 	// Callback function when button is released.
-	std::function<void(ControllerID id, IO::XBOX_360::BUTTON button)> onButtonReleased;
+	static std::function<void(ControllerID id, IO::XBOX_360::BUTTON button)> onButtonReleased;
 
 	// Callback function when axis moved.
-	std::function<void(ControllerID id, IO::XBOX_360::AXIS axis, const float value)> onAxisMoved;
+	static std::function<void(ControllerID id, IO::XBOX_360::AXIS axis, const float value)> onAxisMoved;
 
 	// Callback function when controller is connected
-	std::function<void(ControllerID id)> onControllerConnected;
+	static std::function<void(ControllerID id)> onControllerConnected;
 
 	// Callback function when controller is disconnected
-	std::function<void(ControllerID id)> onControllerDisconnect;
+	static std::function<void(ControllerID id)> onControllerDisconnected;
 
 	// Get/Set minimum axis value
 	const Sint16 getMinAxisValue(ControllerID id);

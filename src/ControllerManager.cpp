@@ -6,6 +6,12 @@ using namespace std;
 
 ControllerManager* ControllerManager::instance = nullptr;
 
+std::function<void(ControllerID, IO::XBOX_360::BUTTON)> ControllerManager::onButtonPressed = nullptr;
+std::function<void(ControllerID, IO::XBOX_360::BUTTON)> ControllerManager::onButtonReleased = nullptr;
+std::function<void(ControllerID, IO::XBOX_360::AXIS, const float)> ControllerManager::onAxisMoved = nullptr;
+std::function<void(ControllerID)> ControllerManager::onControllerConnected = nullptr;
+std::function<void(ControllerID)> ControllerManager::onControllerDisconnected = nullptr;
+
 Controller::Controller(SDL_GameController* controller, 
 	SDL_Haptic* haptic, 
 	const std::string& name, 
@@ -242,7 +248,7 @@ void ControllerManager::addController(const SDL_ControllerDeviceEvent event)
 
 				this->controllers[instanceID] = new Controller(newController, newHaptic, name, instanceID, buttonCount, axisCount);
 
-				if (this->onControllerConnected)
+				if (onControllerConnected)
 				{
 					onControllerConnected(instanceID);
 				}
@@ -267,9 +273,9 @@ void ControllerManager::removeController(const SDL_ControllerDeviceEvent event)
 
 	if (find_it != this->controllers.end())
 	{
-		if (this->onControllerDisconnect)
+		if (onControllerDisconnected)
 		{
-			onControllerDisconnect(event.which);
+			onControllerDisconnected(event.which);
 		}
 
 		delete find_it->second;
@@ -290,9 +296,9 @@ void ControllerManager::buttonPressed(ControllerID id, const SDL_ControllerButto
 			(find_it->second)->updateButtonState(buttonEnum, true);
 		}
 
-		if (this->onButtonPressed)
+		if (onButtonPressed)
 		{
-			this->onButtonPressed(id, buttonEnum);
+			onButtonPressed(id, buttonEnum);
 		}
 	}
 }
@@ -309,9 +315,9 @@ void ControllerManager::buttonReleased(ControllerID id, const SDL_ControllerButt
 			(find_it->second)->updateButtonState(buttonEnum, false);
 		}
 
-		if (this->onButtonPressed)
+		if (onButtonReleased)
 		{
-			this->onButtonReleased(id, buttonEnum);
+			onButtonReleased(id, buttonEnum);
 		}
 	}
 }
